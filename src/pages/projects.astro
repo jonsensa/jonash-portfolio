@@ -6,7 +6,8 @@ const projects = [
     {
         title: "Astro Portfolio",
         description: "A personal portfolio and blog built using Astro, Tailwind CSS v4, and minimal JavaScript for lightning-fast performance.",
-        tags: ["Astro", "TailwindCSS", "TypeScript"]
+        tags: ["Astro", "TailwindCSS", "TypeScript"],
+        link: "https://github.com/jonsensa/jonash-portfolio"
     },
     {
         title: "Weather Dashboard",
@@ -41,6 +42,7 @@ const projects = [
                     title={project.title}
                     description={project.description}
                     tags={project.tags}
+                    link={project.link}
                 />
             ))}
         </div>
