@@ -12,22 +12,148 @@ const { images } = Astro.props;
 
 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[200px]">
     {images.map((image, index) => (
-        <div class={`group relative rounded-xl overflow-hidden bg-slate-900 border border-white/5 
+        <button 
+            type="button"
+            class={`artwork-trigger group relative rounded-xl overflow-hidden bg-slate-900 border border-white/5 cursor-pointer outline-none focus:ring-2 focus:ring-fuchsia-500
             ${index === 0 ? 'md:col-span-2 md:row-span-2' : ''} 
             ${index === 3 ? 'md:row-span-2' : ''}
-        `}>
+        `}
+            data-src={image.src}
+            data-alt={image.alt}
+            data-title={image.title}
+        >
             
             <!-- Artwork Image -->
             <div class="absolute inset-0 w-full h-full group-hover:scale-105 transition-transform duration-700">
-                <img src={image.src} alt={image.alt} class="w-full h-full object-cover" />
+                <img src={image.src} alt={image.alt} class="w-full h-full object-cover" loading="lazy" />
             </div>
             
             <!-- Hover Overlay -->
             <div class="absolute inset-0 bg-slate-950/80 p-6 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <h3 class="text-white font-bold text-lg">{image.title}</h3>
-                <p class="text-slate-400 text-sm mt-1">{image.alt}</p>
+                <h3 class="text-white font-bold text-lg text-left">{image.title}</h3>
+                <p class="text-slate-400 text-sm mt-1 text-left">{image.alt}</p>
+                <div class="mt-4 flex items-center gap-2 text-sm font-medium text-fuchsia-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M224,48V88a8,8,0,0,1-16,0V59.31L133.66,133.66a8,8,0,0,1-11.32-11.32L196.69,48H168a8,8,0,0,1,0-16h48A8,8,0,0,1,224,48ZM104,168V196.69L29.66,122.34a8,8,0,0,0-11.32,11.32L92.69,208H64a8,8,0,0,0,0,16h48a8,8,0,0,0,8-8V168a8,8,0,0,0-16,0Z"></path></svg>
+                    Expand
+                </div>
             </div>
 
-        </div>
+        </button>
     ))}
 </div>
+
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/95 backdrop-blur-md transition-opacity duration-300 opacity-0 overflow-y-auto cursor-zoom-out p-4 md:p-12">
+    <!-- Close Button -->
+    <button id="lightbox-close" class="absolute top-6 right-6 text-white/70 hover:text-white bg-white/10 p-3 rounded-full hover:bg-white/20 transition-colors z-[110]" aria-label="Close image">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg>
+    </button>
+    
+    <!-- Image Container -->
+    <div class="relative max-w-7xl max-h-[85vh] mx-auto flex flex-col items-center cursor-default" id="lightbox-content">
+        <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[75vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-lg transition-transform duration-300 opacity-0 scale-95" />
+        
+        <!-- Caption -->
+        <div class="mt-8 text-center bg-slate-900/50 backdrop-blur-md px-8 py-4 rounded-2xl border border-white/5 shadow-xl max-w-2xl transform transition-transform duration-300 opacity-0 translate-y-4" id="lightbox-caption">
+            <h3 id="lightbox-title" class="text-white font-bold text-2xl md:text-3xl tracking-tight mb-2"></h3>
+            <p id="lightbox-desc" class="text-slate-400 text-sm md:text-base leading-relaxed"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Component Scripts in Astro run automatically on the client
+    document.addEventListener("DOMContentLoaded", () => {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const triggers = document.querySelectorAll('.artwork-trigger');
+
+        if (!lightbox) return; // Guard clause 
+
+        const openLightbox = (src: string, title: string, alt: string) => {
+            // Set data
+            if (lightboxImg) {
+                lightboxImg.setAttribute('src', src);
+                lightboxImg.setAttribute('alt', alt);
+            }
+            if (lightboxTitle) lightboxTitle.textContent = title;
+            if (lightboxDesc) lightboxDesc.textContent = alt;
+
+            // Show lightbox container
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+            
+            // Trigger animation after next tick
+            requestAnimationFrame(() => {
+                lightbox.classList.remove('opacity-0');
+                if (lightboxImg) {
+                    lightboxImg.classList.remove('opacity-0', 'scale-95');
+                    lightboxImg.classList.add('opacity-100', 'scale-100');
+                }
+                if (lightboxCaption) {
+                    lightboxCaption.classList.remove('opacity-0', 'translate-y-4');
+                    lightboxCaption.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        };
+
+        const closeLightbox = () => {
+            // Fade out
+            lightbox.classList.add('opacity-0');
+            if (lightboxImg) {
+                lightboxImg.classList.add('opacity-0', 'scale-95');
+                lightboxImg.classList.remove('opacity-100', 'scale-100');
+            }
+            if (lightboxCaption) {
+                lightboxCaption.classList.add('opacity-0', 'translate-y-4');
+                lightboxCaption.classList.remove('opacity-100', 'translate-y-0');
+            }
+            
+            // Restore scroll
+            document.body.style.overflow = '';
+            
+            // Hide container after transition finishes
+            setTimeout(() => {
+                lightbox.classList.add('hidden');
+                lightbox.classList.remove('flex');
+                if (lightboxImg) lightboxImg.setAttribute('src', ''); // Clear src to prevent flicker on next load
+            }, 300); // matches duration-300
+        };
+
+        // Attach event listeners to all images
+        triggers.forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const src = trigger.getAttribute('data-src');
+                const title = trigger.getAttribute('data-title');
+                const alt = trigger.getAttribute('data-alt');
+                if (src && title && alt) openLightbox(src, title, alt);
+            });
+        });
+
+        // Close when clicking the X button
+        if (lightboxClose) {
+            lightboxClose.addEventListener('click', closeLightbox);
+        }
+
+        // Close when clicking exactly on the background overlay (but not on the image itself)
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Close on Escape key press
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) {
+                closeLightbox();
+            }
+        });
+    });
+</script>

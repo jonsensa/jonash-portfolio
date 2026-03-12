@@ -2,18 +2,18 @@
 title: "Astro Portfolio"
 description: "A personal portfolio and blog built using Astro, Tailwind CSS v4, and minimal JavaScript for lightning-fast performance."
 tags: ["Astro", "TailwindCSS", "TypeScript"]
-image: "https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=800&auto=format&fit=crop"
+image: "/thumbnails/portfolio.png"
 githubUrl: "https://github.com/jonsensa/jonash-portfolio"
 liveUrl: "https://jonash-portfolio.vercel.app"
 ---
 
 ## Building a Next-Generation Portfolio
 
-When it came to building my personal portfolio, I wanted something that was insanely fast, completely customizable, and genuinely fun to build. **Astro** was the clear winner. 
+I had avoided building my portfolio for so long that the universe starting giving me signs to do so. I finally decided to build it with **Astro**. I wanted something that was insanely fast, customizable and genuinely fun. 
 
 By pushing almost zero JavaScript to the client (Island Architecture), the initial loads are snappy, leading to perfect Lighthouse scores immediately out of the box.
 
-### The Stack
+### The Stack I used
 - **Framework:** Astro 
 - **Styling:** Tailwind CSS V4
 - **Deployment:** Vercel
