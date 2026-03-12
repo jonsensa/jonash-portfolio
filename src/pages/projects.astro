@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = [
+    {
+        title: "Astro Portfolio",
+        description: "A personal portfolio and blog built using Astro, Tailwind CSS v4, and minimal JavaScript for lightning-fast performance.",
+        tags: ["Astro", "TailwindCSS", "TypeScript"]
+    },
+    {
+        title: "Weather Dashboard",
+        description: "A real-time weather forecasting application that pulls data from a public API and displays it in a clean, modern UI.",
+        tags: ["React", "API", "CSS"]
+    },
+    {
+        title: "Task Master",
+        description: "A full-stack project management tool built to handle complex workflows and team collaboration seamlessly.",
+        tags: ["Next.js", "Node.js", "PostgreSQL"]
+    },
+    {
+        title: "Game Engine Prototype",
+        description: "An experimental 2D rendering engine built directly in the browser using HTML5 Canvas and raw JavaScript.",
+        tags: ["Canvas API", "JavaScript", "Game Dev"]
+    }
+];
+---
+
+<Layout title="Projects | Jonash">
+    <div class="max-w-5xl mx-auto px-6 py-12 md:p-14 mt-8 mb-20 bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-2xl rounded-[2rem]">
+        <header class="mb-16">
+            <h1 class="text-5xl font-black text-white mb-4 tracking-tight">Software Projects</h1>
+            <p class="text-xl text-slate-400 max-w-2xl">
+                A collection of things I've built. From front-end experiments to full-stack applications.
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map(project => (
+                <ProjectCard 
+                    title={project.title}
+                    description={project.description}
+                    tags={project.tags}
+                />
+            ))}
+        </div>
+    </div>
+</Layout>

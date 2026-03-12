@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+
+const allArtwork = await getCollection('artwork');
+// Use the first 8 pieces for the background grid
+const bgImages = allArtwork.map(entry => entry.data).slice(0, 8);
+---
+
+<section class="relative w-full h-screen overflow-hidden perspective-1000 p-4 md:p-8 -mt-24 pt-24 text-center">
+    
+    <!-- Dynamic Artwork Background Base -->
+    <div class="fixed inset-0 w-[120vw] h-[120vh] -left-[10vw] -top-[10vh] -z-20 pointer-events-none opacity-20 md:opacity-30 mix-blend-screen transition-transform duration-[0.1s] ease-linear" id="artwork-background">
+        <div class="grid grid-cols-2 md:grid-cols-4 w-full h-full gap-2 blur-[6px]">
+            {bgImages.map((img, i) => (
+                <div class={`w-full h-full relative overflow-hidden rounded-3xl opacity-80
+                    ${i % 2 === 0 ? 'animate-float-slow' : 'animate-float-slower'}
+                `}>
+                    <img src={img.src} alt="" class="w-full h-full object-cover scale-110" />
+                </div>
+            ))}
+        </div>
+    </div>
+
+    <!-- Gradient Overlay to ensure text readability -->
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-slate-950/80 to-slate-950 -z-10 pointer-events-none"></div>
+
+    <!-- Glassmorphism Card (Now Full Height) -->
+    <div id="hero-card" class="relative z-10 w-full h-full max-w-7xl mx-auto px-6 pt-28 pb-12 md:px-14 md:pt-32 md:pb-14 rounded-[2rem] bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] flex flex-col justify-center items-center text-center group transition-transform duration-[0.1s] ease-out will-change-transform">
+        
+        <!-- Decorative Glow inside card -->
+        <div class="absolute -top-24 -left-20 w-64 h-64 bg-fuchsia-500/20 rounded-full blur-3xl pointer-events-none mix-blend-screen"></div>
+        <div class="absolute -bottom-24 -right-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none mix-blend-screen"></div>
+
+        <!-- Badge -->
+        <div class="relative z-20 inline-flex items-center gap-3 px-5 py-2 rounded-full bg-slate-950/40 border border-slate-700/50 text-sm font-medium text-slate-300 md:mb-10 mb-8 shadow-inner backdrop-blur-md hover:bg-slate-900/60 transition-colors">
+            <span class="relative flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+            </span>
+            Available for new projects
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="relative z-20 text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white mb-6 leading-[1.1] drop-shadow-lg max-w-4xl mx-auto">
+            I craft <span class="px-2 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 sm:inline-block pb-1">digital experiences</span>
+            through code and art.
+        </h1>
+
+        <!-- Subheading -->
+        <p class="relative z-20 text-base md:text-xl text-slate-300/90 max-w-lg md:max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+            Namaste! I'm Jonash. I'm a developer who loves blending logic with creativity. 
+            Currently building software projects and exploring visual arts on the side.
+        </p>
+
+        <!-- CTAs -->
+        <div class="relative z-20 flex flex-col sm:flex-row gap-5 w-full sm:w-auto">
+            <a href="#projects" class="group/btn flex items-center justify-center gap-3 px-8 py-4 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.15)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-1">
+                View Software Projects
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 256 256" class="group-hover/btn:translate-x-1.5 transition-transform"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
+            </a>
+            
+            <a href="/artwork" class="group/btn flex items-center justify-center gap-3 px-8 py-4 bg-slate-900/50 text-white font-semibold rounded-xl border border-white/20 hover:bg-slate-800/80 hover:border-fuchsia-500/50 transition-all duration-300 hover:-translate-y-1 backdrop-blur-md">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 256 256" class="text-fuchsia-400 group-hover/btn:scale-110 transition-transform"><path d="M216,80v8a56.06,56.06,0,0,1-56,56H144v8a24,24,0,0,1-24,24c-19.16,0-35.12-11.45-38-13.62a8,8,0,0,0-11,2,21.57,21.57,0,0,1-17.65,9.65H48a8,8,0,0,0-8,8v4a32.06,32.06,0,0,0,32,32h32.19c.47,0,19.34.05,37-12,30.34-20.65,34.58-48.4,34.78-50v-8h16a72.08,72.08,0,0,0,72-72V80A48.05,48.05,0,0,0,216,80ZM40,111A71.74,71.74,0,0,1,104.93,42.52a80.3,80.3,0,0,1,16.5-1.42A72.16,72.16,0,0,1,192,109.8a40,40,0,0,1-15.06,2.15C163.63,111.44,152,103.26,152,88a8,8,0,0,0-16,0c0,15.26-11.63,23.44-24.94,23.95A40,40,0,0,1,96,109.8a40,40,0,0,1-15.06,2.15C67.63,111.44,56,103.26,56,88a8,8,0,0,0-16,0C40,105.74,40,108.79,40,111Z" opacity="0.2"></path><path d="M216,72a56.06,56.06,0,0,0-56-56,79.8,79.8,0,0,0-17.47,1.52,80,80,0,0,0-82,107,37.38,37.38,0,0,0,16,10c5,2,8.69,2.83,11.39,3.48A45.54,45.54,0,0,0,88,144a48,48,0,0,0,48-48,8,8,0,0,1,16,0,48,48,0,0,0,48,48A55.77,55.77,0,0,1,216,72ZM60.52,125c-8.77,0-18.06-2.5-23.74-6.32a.54.54,0,0,0,0-.09A64,64,0,0,1,114.39,47.41a63.85,63.85,0,0,1,69.5,61.94,40,40,0,0,0-26.6-7c-8.78,0-18.06-2.5-23.75-6.32a63.3,63.3,0,0,1-30.82-27.42A63.3,63.3,0,0,1,71.9,96.06,40.1,40.1,0,0,0,45.3,103.11c6.54-6.19,10-18.23,3.77-33a8,8,0,1,0-14.71,6.29c4.25,10,2.1,16.5-1.16,19.59A37.31,37.31,0,0,0,60.52,125Zm55.33,70.83c-14.86,10.09-31.29,10.23-32.93,10.24H52.29a37,37,0,0,0,3,10.6A16.07,16.07,0,0,1,56,224H48a8,8,0,0,1,0-16h8a37.4,37.4,0,0,0,12.72-2.32,15.75,15.75,0,0,1-21-9C38.07,171.7,59.3,152,80.3,152c16.51,0,32,10,32,24Zm108.71-60a64.07,64.07,0,0,1-64,64H152v8c-.14,1.15-3.35,22.38-27.42,38.74a8,8,0,0,1-9.06-13.25C138.83,212.44,152,192.49,152,184a8,8,0,0,1,8-8h.56A72.08,72.08,0,0,0,232,104a8,8,0,0,1,16,0v8A48,48,0,0,1,224.56,135.83Z"></path></svg>
+                Explore Art Gallery
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Idle floating animations for the background artwork grid */
+    @keyframes float-slow {
+        0%, 100% { transform: translateY(0) scale(1.05); }
+        50% { transform: translateY(-3%) scale(1.08); }
+    }
+    @keyframes float-slower {
+        0%, 100% { transform: translateY(-2%) scale(1.08); }
+        50% { transform: translateY(2%) scale(1.05); }
+    }
+    .animate-float-slow {
+        animation: float-slow 20s ease-in-out infinite;
+    }
+    .animate-float-slower {
+        animation: float-slower 30s ease-in-out infinite;
+    }
+</style>
+
+<script>
+    // 3D Mouse parallax effect 
+    document.addEventListener("DOMContentLoaded", () => {
+        const section = document.querySelector("section");
+        const bg = document.getElementById("artwork-background");
+        const card = document.getElementById("hero-card");
+        
+        let isHovering = false;
+        
+        if (!section || !bg || !card) return;
+
+        section.addEventListener("mousemove", (e) => {
+            const { clientX, clientY } = e;
+            
+            // Calculate mouse position relative to center of screen (-1 to 1)
+            const xPos = (clientX / window.innerWidth - 0.5) * 2;
+            const yPos = (clientY / window.innerHeight - 0.5) * 2;
+
+            // BACKGROUND PARALLAX: Move background opposite to mouse
+            const bgTranslateX = xPos * -40; // max 40px
+            const bgTranslateY = yPos * -40; 
+            bg.style.transform = `translate(${bgTranslateX}px, ${bgTranslateY}px)`;
+            
+            // CARD 3D TILT: Rotate the glass card slightly towards the mouse
+            const rotateX = yPos * -8; // Max 8 deg tilt up/down
+            const rotateY = xPos * 8;  // Max 8 deg tilt left/right
+            
+            card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // Reset positions gracefully on mouse leave
+        section.addEventListener("mouseleave", () => {
+            bg.style.transform = `translate(0px, 0px)`;
+            bg.style.transition = `transform 1s cubic-bezier(0.2, 0.8, 0.2, 1)`;
+            
+            card.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
+            card.style.transition = `transform 1s cubic-bezier(0.2, 0.8, 0.2, 1)`;
+            
+            isHovering = false;
+        });
+        
+        // Remove transitions when actively hovering for snappy 1:1 mouse tracking
+        section.addEventListener("mouseenter", () => {
+            if(!isHovering) {
+                // Remove transition delay briefly after mouse enters so tracking is immediate
+                setTimeout(() => {
+                    card.style.transition = `none`;
+                    bg.style.transition = `none`;
+                }, 100);
+                isHovering = true;
+            }
+        });
+    });
+</script>

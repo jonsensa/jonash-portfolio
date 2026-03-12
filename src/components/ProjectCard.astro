@@ -1,0 +1,43 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    tags: string[];
+    link?: string;
+    image?: string;
+}
+
+const { title, description, tags, link = "#", image } = Astro.props;
+---
+
+<a href={link} class="group block h-full bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden hover:border-fuchsia-500/50 transition-all duration-300 hover:-translate-y-1">
+    
+    <!-- Project Image -->
+    <div class="w-full h-48 bg-slate-800 relative overflow-hidden">
+        {image ? (
+            <img src={image} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+            <>
+                <div class="absolute inset-0 bg-gradient-to-tr from-slate-900 to-slate-800 group-hover:scale-105 transition-transform duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H216v90.75l-51.52-54.3a16,16,0,0,0-22.61-.39L84.38,145.42,61.92,120.25a16,16,0,0,0-23.7,0L40,122.28Zm176,144H40V143.61l23.5-26.31,23.32,26.13a16,16,0,0,0,22.75,1.16L164.5,93.68,216,148Z"></path></svg>
+                </div>
+            </>
+        )}
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-fuchsia-400 transition-colors">{title}</h3>
+        <p class="text-slate-400 text-sm mb-6 line-clamp-2">{description}</p>
+        
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-2 mt-auto">
+            {tags.map((tag) => (
+                <span class="px-2.5 py-1 text-xs font-semibold bg-purple-500/10 text-fuchsia-400 rounded-md border border-fuchsia-500/20">
+                    {tag}
+                </span>
+            ))}
+        </div>
+    </div>
+</a>

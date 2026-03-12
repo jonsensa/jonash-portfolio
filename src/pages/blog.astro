@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BlogPreview from '../components/BlogPreview.astro';
+import { getCollection } from 'astro:content';
+
+// Auto-magically fetch everything in src/content/blog/
+const allBlogPosts = await getCollection('blog');
+
+// Sort them from newest to oldest
+const posts = allBlogPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Layout title="Blog | Jonash">
+    <div class="max-w-3xl mx-auto px-6 py-12 md:p-14 mt-8 mb-20 bg-white/[0.02] backdrop-blur-3xl border border-white/5 shadow-2xl rounded-[2rem]">
+        <header class="mb-16">
+            <h1 class="text-5xl font-black text-white mb-4 tracking-tight">Writing</h1>
+            <p class="text-xl text-slate-400 max-w-2xl">
+                Thoughts, tutorials, and deep-dives into software development and design.
+            </p>
+        </header>
+
+        <div class="space-y-6">
+            {posts.map(post => (
+                <BlogPreview 
+                    title={post.data.title}
+                    date={post.data.date.toLocaleDateString('en-us', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}
+                    readTime={post.data.readTime || "5 min"}
+                    excerpt={post.data.excerpt}
+                    link={`/blog/${post.slug}`}
+                />
+            ))}
+        </div>
+    </div>
+</Layout>
+
+

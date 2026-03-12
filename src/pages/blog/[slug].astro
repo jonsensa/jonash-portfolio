@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+// 1. Generate a new path for every collection entry
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+// 2. For your template, you can get the entry directly from the prop
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.title} | Jonash`}>
+  <article class="max-w-3xl mx-auto px-6 mt-16 mb-24">
+    <header class="mb-12">
+        <div class="flex items-center gap-3 text-sm text-slate-500 mb-4 font-medium tracking-wide uppercase">
+            <a href="/blog" class="hover:text-fuchsia-400 transition-colors">← Back to Blog</a>
+            <span class="w-1 h-1 rounded-full bg-slate-700"></span>
+            <time datetime={entry.data.date.toISOString()}>
+                {entry.data.date.toLocaleDateString('en-us', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}
+            </time>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-white leading-tight mb-6">
+            {entry.data.title}
+        </h1>
+        <p class="text-xl text-slate-400 leading-relaxed border-l-4 border-purple-500/50 pl-6">
+            {entry.data.excerpt}
+        </p>
+    </header>
+
+    <!-- The actual Markdown content gets rendered in here! -->
+    <div class="prose prose-invert prose-slate max-w-none prose-a:text-fuchsia-400 hover:prose-a:text-fuchsia-300 prose-headings:font-bold prose-p:leading-relaxed prose-img:rounded-xl">
+      <Content />
+    </div>
+  </article>
+</Layout>
