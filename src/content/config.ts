@@ -21,8 +21,21 @@ const artworkCollection = defineCollection({
     })
 });
 
+const projectsCollection = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        tags: z.array(z.string()),
+        image: z.string().optional(),
+        githubUrl: z.string().optional(),
+        liveUrl: z.string().optional()
+    })
+});
+
 // Export the collections object to register it with Astro
 export const collections = {
     'blog': blogCollection,
     'artwork': artworkCollection,
+    'projects': projectsCollection,
 };

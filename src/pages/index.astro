@@ -11,6 +11,10 @@ const allBlogPosts = await getCollection('blog');
 const latestPosts = allBlogPosts
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
     .slice(0, 2);
+
+// Fetch all projects
+const allProjects = await getCollection('projects');
+
 // Fetch all artwork and limit to 4 for the homepage preview
 const allArtwork = await getCollection('artwork');
 const previewArt = allArtwork.map(entry => entry.data).slice(0, 4);
@@ -31,20 +35,15 @@ const previewArt = allArtwork.map(entry => entry.data).slice(0, 4);
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ProjectCard 
-                    title="Astro Portfolio" 
-                    description="A personal portfolio and blog built using Astro, Tailwind CSS v4, and minimal JavaScript for lightning-fast performance."
-                    tags={["Astro", "TailwindCSS", "TypeScript"]}
-                    image="https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=800&auto=format&fit=crop"
-                    link="https://github.com/jonsensa/jonash-portfolio"
-                />
-                <ProjectCard 
-                    title="Weather Dashboard" 
-                    description="A real-time weather forecasting application that pulls data from a public API and displays it in a clean, modern UI."
-                    tags={["React", "API", "CSS"]}
-                    image="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?q=80&w=800&auto=format&fit=crop"
-                    link="https://github.com"
-                />
+                {allProjects.slice(0, 2).map(project => (
+                    <ProjectCard 
+                        title={project.data.title}
+                        description={project.data.description}
+                        tags={project.data.tags}
+                        link={`/projects/${project.slug}`}
+                        image={project.data.image}
+                    />
+                ))}
             </div>
         </section>
 

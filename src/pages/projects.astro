@@ -1,30 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
 
-const projects = [
-    {
-        title: "Astro Portfolio",
-        description: "A personal portfolio and blog built using Astro, Tailwind CSS v4, and minimal JavaScript for lightning-fast performance.",
-        tags: ["Astro", "TailwindCSS", "TypeScript"],
-        link: "https://github.com/jonsensa/jonash-portfolio"
-    },
-    {
-        title: "Weather Dashboard",
-        description: "A real-time weather forecasting application that pulls data from a public API and displays it in a clean, modern UI.",
-        tags: ["React", "API", "CSS"]
-    },
-    {
-        title: "Task Master",
-        description: "A full-stack project management tool built to handle complex workflows and team collaboration seamlessly.",
-        tags: ["Next.js", "Node.js", "PostgreSQL"]
-    },
-    {
-        title: "Game Engine Prototype",
-        description: "An experimental 2D rendering engine built directly in the browser using HTML5 Canvas and raw JavaScript.",
-        tags: ["Canvas API", "JavaScript", "Game Dev"]
-    }
-];
+const allProjects = await getCollection('projects');
 ---
 
 <Layout title="Projects | Jonash">
@@ -37,12 +16,13 @@ const projects = [
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map(project => (
+            {allProjects.map(project => (
                 <ProjectCard 
-                    title={project.title}
-                    description={project.description}
-                    tags={project.tags}
-                    link={project.link}
+                    title={project.data.title}
+                    description={project.data.description}
+                    tags={project.data.tags}
+                    link={`/projects/${project.slug}`}
+                    image={project.data.image}
                 />
             ))}
         </div>
